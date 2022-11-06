@@ -13,6 +13,7 @@
 // along with this software.
 // If not, see <https://opensource.org/licenses/Apache-2.0>.
 
+use amplify::hex::ToHex;
 use bitcoin::hashes::Hash;
 use bitcoin::psbt::TapTree;
 use bitcoin::util::taproot::TapBranchHash;
@@ -166,6 +167,7 @@ impl EmbedCommitVerify<lnpbp4::CommitmentHash, Lnpbp6> for psbt::Output {
             .map_err(|_| PsbtCommitError::TapTreeError)?;
 
         self.script = Script::new_v1_p2tr_tweaked(output_key).into();
+        println!("Final Script: {}", self.script.to_hex());
 
         let proof = TapretProof {
             path_proof,

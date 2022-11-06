@@ -14,7 +14,6 @@
 // If not, see <https://opensource.org/licenses/Apache-2.0>.
 
 use amplify::Wrapper;
-use bitcoin::hashes::hex::ToHex;
 use bitcoin::schnorr::{TweakedPublicKey, UntweakedPublicKey};
 use bitcoin::util::taproot::{TaprootBuilder, TaprootBuilderError};
 use bitcoin_scripts::TapScript;
@@ -98,22 +97,6 @@ impl ConvolveCommitVerify<lnpbp4::CommitmentHash, TapretProof, Lnpbp6>
             .map_err(|_| TaprootBuilderError::IncompleteTree)?;
 
         let output_key = spend_info.output_key();
-
-        println!("Output Key: {:#?}", output_key.to_hex());
-        println!("Taptweak: {:#?}", spend_info.tap_tweak().to_hex());
-
-        let versioned_script_a = spend_info
-            .as_script_map()
-            .into_iter()
-            .find(|(s, _)| s.0.to_hex() != script_commitment.to_hex());
-
-        let cb = spend_info
-            .control_block(&versioned_script_a.unwrap().0)
-            .unwrap()
-            .serialize()
-            .to_hex();
-
-        println!("Control Block: {:#?}", cb);
 
         let proof = TapretProof {
             path_proof: supplement.clone(),

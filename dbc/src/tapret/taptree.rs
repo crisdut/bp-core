@@ -18,6 +18,7 @@
 use core::fmt::Debug;
 use core::hash::Hash;
 
+use amplify::hex::ToHex;
 use bitcoin::psbt::{IncompleteTapTree, TapTree};
 use bitcoin::util::taproot::TaprootBuilderError;
 use bitcoin_scripts::taproot::{
@@ -284,6 +285,7 @@ impl EmbedCommitVerify<lnpbp4::CommitmentHash, Lnpbp6>
     ) -> Result<Self::Proof, Self::CommitError> {
         for nonce in 0..=u8::MAX {
             let commitment_script = TapScript::commit(&(*msg, nonce));
+            println!("Commitment Script: {}", commitment_script.to_hex());
 
             let commitment_node =
                 TreeNode::with_tap_script(commitment_script, 0);
